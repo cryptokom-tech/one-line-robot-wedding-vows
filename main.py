@@ -36,6 +36,15 @@ def main():
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(LINE + "\n")
+    # Read the file back and verify it round-trips exactly: the gate
+    # counts the file's bytes, so a mismatch here must fail loudly
+    # instead of shipping a line the judge never sees.
+    with open("/output/entry.txt", encoding="utf-8") as f:
+        written = f.read()
+    if written != LINE + "\n":
+        print("entry.txt does not match the vow", file=sys.stderr)
+        return 1
+    print(f"wrote {len(LINE)}-character vow to /output/entry.txt")
     return 0
 
 
